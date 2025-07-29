@@ -1,5 +1,5 @@
 # StudyTime
-Um sistema de gestão de estudos com a técnica Pomodoro, desenvolvido em C com MySQL.
+Um sistema de gestão de estudos com a técnica Pomodoro, desenvolvido em Python com Django e MySQL.
 
 ## Funcionalidades principais (MVP)
 
@@ -8,13 +8,14 @@ Um sistema de gestão de estudos com a técnica Pomodoro, desenvolvido em C com 
 - Registro de sessões com data, hora, matéria estudada e duração
 - Relatórios com tempo total estudado por dia, semana e matéria
 - Visualização de número de sessões e progresso
+- Alarme sonoro configurável
 
 ## Tecnologias
 
-- **Linguagem:** C
-- **Interface Gráfica:**
+- **Linguagem:** Python
+- **Framework Web** Django
 - **Banco de Dados:** MySQL
-- **Plataforma:** Desktop (Windows/Linux)
+- **Plataforma:** Web (Windows/Linux)
 
 ## Contribuidores
 
