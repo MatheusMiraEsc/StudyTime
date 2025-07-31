@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home-Teste</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #clock {
+            font-size: 5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="clock">00:00:00</div>
+    <div class="buttons">
+        <button onclick="start()">Iniciar</button>
+        <button onclick="pause()">Pausar</button>
+        <button onclick="reset()">Zerar</button>
+    </div>
+
+    <script>
+        let seconds = 0;
+        let interval = null;
+
+        function updateDisplay() {
+            const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hrs}:${mins}:${secs}`;
+        }
+
+        function start() {
+            if (interval) return; // já está rodando
+            interval = setInterval(() => {
+                seconds++;
+                updateDisplay();
+            }, 1000);
+        }
+
+        function pause() {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        function reset() {
+            pause();
+            seconds = 0;
+            updateDisplay();
+        }
+    </script>
+</body>
+
+</html>
