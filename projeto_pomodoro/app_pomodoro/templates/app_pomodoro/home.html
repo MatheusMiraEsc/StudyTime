@@ -1,77 +1,211 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Home-Teste</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            background-color: #0e1624;
+            font-family: Arial, sans-serif;
+            color: white;
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #0e1624;
+            padding: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
+            justify-content: center;
+            text-align: center;
         }
-
-        #clock {
-            font-size: 5rem;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .buttons {
+        .mode-buttons {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
         }
-
-        button {
-            font-size: 1.2rem;
+        .mode-buttons button {
             padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e2a3b;
+            color: white;
+            cursor: pointer;
+        }
+        .mode-buttons .active {
+            background-color: #357aff;
+        }
+        .timer-circle {
+            width: 220px;
+            height: 220px;
+            border: 4px solid #357aff;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .timer-circle span {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .controls button {
+            background: #1e2a3b;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+        }
+        .stats {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 20px;
+        }
+        .stats p {
+            font-size: 24px;
+            margin: 0;
+        }
+        #main-btn {
+            padding: 15px 40px;
+            background-color: #357aff;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
         }
     </style>
 </head>
-
 <body>
-    <div id="clock">00:00:00</div>
-    <div class="buttons">
-        <button onclick="start()">Iniciar</button>
-        <button onclick="pause()">Pausar</button>
-        <button onclick="reset()">Zerar</button>
+    <div class="sidebar">
+        <ul>
+            <li>Usuário</li>
+            <li>Entrar / Registrar</li>
+            <li>Cadastro de Matérias</li>
+            <li>Gráficos e Relatórios</li>
+            <li>Tarefas</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="mode-buttons">
+           
+        </div>
+
+        <div class="timer-circle">
+            <span id="timer">25:00</span>
+            <p>Tempo de Estudo</p>
+        </div>
+
+        <div class="controls">
+            <button id="reset">&#10226;</button>
+            <button id="start">&#9658;</button>
+            <button id="skip">Pular</button>
+        </div>
+
+        <div class="stats">
+            <div>
+                <p id="sessions">0</p>
+                <span>Sessões Completas</span>
+            </div>
+         
+        </div>
+
+    
     </div>
 
     <script>
-        let seconds = 0;
-        let interval = null;
+        let timerDisplay = document.getElementById('timer');
+        let startButton = document.getElementById('start');
+        let resetButton = document.getElementById('reset');
+        let skipButton = document.getElementById('skip');
+        let sessionsDisplay = document.getElementById('sessions');
+ 
+        let mainBtn = document.getElementById('main-btn');
+
+        let time = 25 * 60;
+        let timer;
+        let running = false;
+        let sessions = 0;
+    
 
         function updateDisplay() {
-            const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
-            const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-            const secs = String(seconds % 60).padStart(2, '0');
-            document.getElementById('clock').textContent = `${hrs}:${mins}:${secs}`;
+            let minutes = Math.floor(time / 60);
+            let seconds = time % 60;
+            timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         }
 
-        function start() {
-            if (interval) return; // já está rodando
-            interval = setInterval(() => {
-                seconds++;
-                updateDisplay();
-            }, 1000);
+        function startPauseTimer() {
+            if (!running) {
+                running = true;
+                startButton.textContent = '⏸';
+                timer = setInterval(() => {
+                    time--;
+                    updateDisplay();
+                    if (time <= 0) {
+                        clearInterval(timer);
+                        running = false;
+                        sessions++;
+                        sessionsDisplay.textContent = sessions;
+                    
+                        time = 25 * 60;
+                        updateDisplay();
+                    }
+                }, 1000);
+            } else {
+                running = false;
+                startButton.textContent = '▶';
+                clearInterval(timer);
+            }
         }
 
-        function pause() {
-            clearInterval(interval);
-            interval = null;
-        }
-
-        function reset() {
-            pause();
-            seconds = 0;
+        function resetTimer() {
+            clearInterval(timer);
+            running = false;
+            time = 25 * 60;
             updateDisplay();
+            startButton.textContent = '▶';
         }
+
+        function skipTimer() {
+            clearInterval(timer);
+            running = false;
+            time = 25 * 60;
+            updateDisplay();
+            startButton.textContent = '▶';
+            sessions++;
+            sessionsDisplay.textContent = sessions;
+        }
+
+        startButton.addEventListener('click', startPauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+        skipButton.addEventListener('click', skipTimer);
+        mainBtn.addEventListener('click', startPauseTimer);
+
+        updateDisplay();
     </script>
 </body>
-
 </html>
