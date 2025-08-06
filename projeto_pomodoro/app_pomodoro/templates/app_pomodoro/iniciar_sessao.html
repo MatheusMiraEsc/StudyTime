@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrar Sessão Manual</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    form { margin-bottom: 30px; }
+    input[type="text"] { padding: 8px; width: 300px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px 12px; border: 1px solid #ccc; }
+    th { background-color: #f0f0f0; }
+  </style>
+</head>
+<body>
+
+  <h1>Registrar Sessão Manual</h1>
+
+  <form method="POST" action="{% url 'iniciar_sessao' %}">
+    {% csrf_token %}
+    
+    <label for="materia">Matéria (opcional):</label>
+    <input type="text" name="materia" id="materia">
+
+    <!-- Campos ocultos preenchidos pelo JS -->
+    <input type="hidden" name="inicio" id="inicio">
+    <input type="hidden" name="fim" id="fim">
+    <input type="hidden" name="ciclos" id="ciclos" value="0">
+
+    <br>
+    <button type="submit">Criar Sessão</button>
+  </form>
+
+  {% if sessoes %}
+    <h2>Sessões Criadas</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Matéria</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Ciclos</th>
+      </tr>
+      {% for sessao in sessoes %}
+      <tr>
+        <td>
+  {% if sessao.id_materia %}
+    {{ sessao.id_materia.nome_materia }}
+  {% else %}
+    Não informada
+  {% endif %}
+</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>Nenhuma sessão registrada ainda.</p>
+  {% endif %}
+
+  <script>
+    // Define automaticamente os campos de horário ao enviar o formulário
+    document.querySelector("form").addEventListener("submit", function () {
+      const agora = new Date();
+      const horaFormatada = agora.toTimeString().slice(0, 8); // HH:MM:SS
+      document.getElementById("inicio").value = horaFormatada;
+      document.getElementById("fim").value = horaFormatada; // mesmo valor por enquanto
+      document.getElementById("ciclos").value = 0;
+    });
+  </script>
+
+</body>
+</html>
