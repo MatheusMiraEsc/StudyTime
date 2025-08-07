@@ -15,25 +15,50 @@ def home(request):
 
 def iniciar_sessao(request):
     if request.method == 'POST':
-        nome_M = request.POST.get("materia", "").strip()
+        nome_M = request.POST.get("materia", "")#.strip()
         ciclos = int(request.POST.get("ciclos", 0))
 
-        materia = None
-        if nome_M:
-            materia = Materia.objects.filter(nome_materia__iexact=nome_M).first()# ajustar para não precisar de nome e para selecionar a materia certa caso aja mais de um ou não exista
+        # materia = None
+        # if nome_M:
+        #     materia = Materia.objects.filter(nome_materia__iexact=nome_M).first()# ajustar para não precisar de nome e para selecionar a materia certa caso aja mais de um ou não exista
         
-        hora_inicio = datetime.now().time()
-        #hora_fim = datetime.strptime(request.POST.get("fim"), "%H:%M:%S").time()
-        
+        hora_inicio = datetime.now()
+        hora_fim = hora_inicio + timedelta(minutes=25)
         sessao = Sessao.objects.create(
-            id_materia = materia, #ou Materia.objects.get(id)??, mesmo com materia, encontrar como pegar de outra tabela
+            #id_materia = nome_M, em branco pois Funcionalidade de materia ainda não foi iniciada
             data_hora_inicio = hora_inicio,
-            data_hora_fim = hora_inicio,
+            data_hora_fim = hora_fim,
             ciclos_completos = ciclos,
         )
-        return redirect("iniciar_sessao") #À ajustar
-    sessoes = Sessao.objects.all().order_by("-id")
-    return render(request, "app_pomodoro/iniciar_sessao.html", {"sessoes": sessoes}) # O que fazer??
+        return redirect("iniciar_sessao")
+    sessoes = Sessao.objects.all()#.order_by("-id")
+
+    sessoes_formatadas=[]
+    for sessao in sessoes:
+        if sessao.data_hora_inicio and sessao.data_hora_fim:
+            inicio = sessao.data_hora_inicio#int(sessao.data_hora_inicio.total_seconds // 60)
+            fim =  sessao.data_hora_fim#int(sessao.data_hora_fim.total_seconds // 60)
+            duracao = fim - inicio
+            minutos_total = int(duracao.total_seconds()) // 60
+            horas = minutos_total // 60
+            minutos = minutos_total % 60
+
+            if horas > 0:
+                duracao_formatada = f"{horas}h {minutos}min"
+            else:
+                duracao_formatada = f"{minutos}min"
+        else:
+            duracao_formatada = "Sessão em andamento"
+        materia = request.POST.get("materia", "").strip()
+        sessoes_formatadas.append({
+            #"id":sessao.id, em branco até materia ser adicionada
+            "materia": materia,#em branco até materia ser adicionada - sessao.id_materia.nome_materia if sessao.id_materia else "Não informada",
+            "duracao":duracao_formatada,
+            "ciclos":sessao.ciclos_completos,
+        })
+
+
+    return render(request, "app_pomodoro/iniciar_sessao.html", {"sessoes": sessoes_formatadas})
 
 
 #def iniciar_sessao_vazia(request):

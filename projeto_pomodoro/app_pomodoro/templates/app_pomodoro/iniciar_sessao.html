@@ -15,7 +15,7 @@
 </head>
 <body>
 
-  <h1>Registrar Sessão Manual</h1>
+  <h1>Registrar Sessão</h1>
 
   <form method="POST" action="{% url 'iniciar_sessao' %}">
     {% csrf_token %}
@@ -38,19 +38,28 @@
       <tr>
         <th>ID</th>
         <th>Matéria</th>
-        <th>Início</th>
-        <th>Fim</th>
+        <th>Tempo estudado</th>
         <th>Ciclos</th>
       </tr>
       {% for sessao in sessoes %}
       <tr>
         <td>
-  {% if sessao.id_materia %}
-    {{ sessao.id_materia.nome_materia }}
-  {% else %}
-    Não informada
-  {% endif %}
-</td>
+          {{ forloop.counter0 }}
+          <!-- {% if sessao.id %}
+            {{ sessao.id }}
+          {% else %}
+            Não disponivel
+          {% endif %} -->
+        </td>
+        <td>
+          {% if sessao.materia %}
+            {{ sessao.materia }}
+          {% else %}
+            Não informada
+          {% endif %}
+        </td>
+        <td>{{ sessao.duracao }}</td>
+        <td>{{ sessao.ciclos }}</td>
 
       </tr>
       {% endfor %}
@@ -68,6 +77,7 @@
       document.getElementById("fim").value = horaFormatada; // mesmo valor por enquanto
       document.getElementById("ciclos").value = 0;
     });
+    
   </script>
 
 </body>

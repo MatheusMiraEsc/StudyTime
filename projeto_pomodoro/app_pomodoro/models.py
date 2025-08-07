@@ -19,7 +19,7 @@ class Materia(models.Model):
 
 class Sessao(models.Model):
     #id_sessao = models.IntegerField(null=True) aparentemente o proprio django faz o id automatico
-    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=True, blank=True)
-    data_hora_inicio = models.TimeField(null=True)
-    data_hora_fim = models.TimeField(null=True)
-    ciclos_completos = models.IntegerField(null=True)
+    #id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=True, blank=True)
+    data_hora_inicio = models.DateTimeField(null=True, blank = True)
+    data_hora_fim = models.DateTimeField(null=True, blank = True)
+    ciclos_completos = models.IntegerField(null=True, blank = True)
