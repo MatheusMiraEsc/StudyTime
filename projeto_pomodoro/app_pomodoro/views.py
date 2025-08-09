@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from datetime import timedelta, timezone, datetime
 from .models import Ciclo, Materia, Sessao
 from django.http import HttpResponse
-# Create your views here.
+from .forms import Registroform
+from django.contrib.auth import authenticate, login
 
 def home(request):
     return render(request, 'app_pomodoro/home_integrado.html')
@@ -60,5 +61,25 @@ def iniciar_sessao(request):
 
     return render(request, "app_pomodoro/iniciar_sessao.html", {"sessoes": sessoes_formatadas})
 
+def registrar(request):
+    if request.method == 'POST':
+        form = Registroform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home_integrado')
+    else:
+        form = Registroform()
+    return render(request, 'app_pomodoro/registrar.html', {'form': form})
 
+def logar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home_integrado')
+        else:
+            return render(request, 'app_pomodoro/logar.html', {'error': 'Usuário ou senha inválidos.'})
+    return render(request, 'app_pomodoro/logar.html')
 #def iniciar_sessao_vazia(request):

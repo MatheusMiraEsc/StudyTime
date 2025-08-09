@@ -8,10 +8,28 @@
     #timer { font-size: 48px; margin: 20px; }
     button { font-size: 16px; margin: 5px; padding: 10px 20px; }
     input, label { display: block; margin: 10px auto; }
+
+    .login-button {
+      display: inline-block;
+      font-size: 14px;
+      padding: 8px 16px;
+      margin: 10px auto;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .login-button:hover {
+      background-color: #ddd;
+    }
   </style>
 </head>
 <body>
   <h1>Pomodoro Timer</h1>
+  <a href="login/" class="login-button">Login / Registro</a>
   <div id="timer">25:00</div>
 
   <button onclick="startStudy()">Iniciar Estudo</button>

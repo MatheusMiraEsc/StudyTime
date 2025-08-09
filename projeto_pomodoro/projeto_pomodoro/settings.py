@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'projeto_pomodoro.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'studytimedb',            
+        'NAME': 'pomodoro_db', 
         'USER': 'user_django',           
         'PASSWORD': 'mysql',   
         'HOST': 'localhost',

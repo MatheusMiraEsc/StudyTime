@@ -7,5 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #rota, view responsavel, nome referencia
     path('', views.home, name='home_integrado'),
-    path('iniciar_sessao/', views.iniciar_sessao, name='iniciar_sessao')
+    path('iniciar_sessao/', views.iniciar_sessao, name='iniciar_sessao'),
+    path('registrar/', views.registrar, name='registrar'),
+    path('login/', views.logar, name='login'),
 ]
