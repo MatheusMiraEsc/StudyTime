@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Pomodoro Timer</title>
+  {% load static %}
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
     #timer { font-size: 48px; margin: 20px; }
@@ -49,14 +50,36 @@
     <button type="submit">Registrar Sessão</button>
   </form>
 
+  <!-- O audio do alarme (localizado na pasta static) e o botao de mute -->
+  <audio id="alarm-audio" src="{% static 'alarme.mp3' %}" preload="auto"></audio>
+  <button id="mute-btn" onclick="toggleMute()" type="button">🔊 Som</button>
+  <!-- <button onclick="testAlarm()" type="button">Testar Alarme</button> -->
+
   <script>
     let timer;
     let startTime;
     let remainingTime = 1500; // 25min em segundos
     let isPaused = false;
     let ciclos = 0;
+    let isMuted = false; // variavel pro controle do mute
 
-    function updateDisplay() {
+    const alarmAudio = document.getElementById("alarm-audio"); // essa variavel controla o audio do alarme
+    const muteBtn = document.getElementById("mute-btn"); // essa variavel controla o botao de mute
+
+    function playAlarm() { // função pra tocar o alarme
+      if (!isMuted) {
+        alarmAudio.currentTime = 0;
+        alarmAudio.play();
+      }
+    }
+
+    function toggleMute() { // função para alternar o mute
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? "🔇 Mutado" : "🔊 Som";
+      alarmAudio.muted = isMuted;
+    }
+
+    function updateDisplay() { // função para atualizar o display do timer
       const minutes = Math.floor(remainingTime / 60);
       const seconds = remainingTime % 60;
       document.getElementById("timer").textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
@@ -75,6 +98,7 @@
           remainingTime--;
           updateDisplay();
           if (remainingTime === 0) {
+            playAlarm(); // se o tempo dos 25 minutos acabar, toca o alarme
             alert("Tempo de estudo finalizado! Escolha seu descanso.");
             ciclos++;
             document.getElementById("ciclos").value = ciclos;
@@ -101,30 +125,36 @@
           remainingTime--;
           updateDisplay();
           if (remainingTime === 0) {
+            playAlarm(); // se o tempo do descanso acabar, toca o alarme
             alert("Descanso finalizado! Pode iniciar o próximo ciclo de estudo.");
           }
         }
       }, 1000);
     }
 
+    // function testAlarm() {
+    //   alarmAudio.currentTime = 0;
+    //   alarmAudio.play();
+    // }
+
     updateDisplay();
 
     document.querySelector('form').addEventListener('submit', function (e) {
-    // Garante que os campos estejam atualizados antes do envio
-    const fim = document.getElementById("fim").value;
-    const inicio = document.getElementById("inicio").value;
-    const ciclosVal = ciclos;
+      // Garante que os campos estejam atualizados antes do envio
+      const fim = document.getElementById("fim").value;
+      const inicio = document.getElementById("inicio").value;
+      const ciclosVal = ciclos;
 
-    // if (!inicio || !fim || ciclosVal === 0) {
-    //   e.preventDefault(); // Cancela o envio do formulário
-    //   alert("Você precisa concluir pelo menos 1 ciclo antes de registrar a sessão.");
-    //   return;
-    // }
+      // if (!inicio || !fim || ciclosVal === 0) {
+      //   e.preventDefault(); // Cancela o envio do formulário
+      //   alert("Você precisa concluir pelo menos 1 ciclo antes de registrar a sessão.");
+      //   return;
+      // }
 
-    document.getElementById("inicio").value = inicio;
-    document.getElementById("fim").value = fim;
-    document.getElementById("ciclos").value = ciclosVal;
-  });
+      document.getElementById("inicio").value = inicio;
+      document.getElementById("fim").value = fim;
+      document.getElementById("ciclos").value = ciclosVal;
+    });
   </script>
 </body>
 </html>
