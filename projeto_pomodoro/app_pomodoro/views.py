@@ -13,52 +13,58 @@ def home(request):
 #     data_hora_fim = models.TimeField()
 #     ciclos_completos = models.IntegerField()
 
-def iniciar_sessao(request):
+def iniciar_sessao(request): # ativar função ao iniciar sessao e terminar sessao
     if request.method == 'POST':
-        nome_M = request.POST.get("materia", "")#.strip()
-        ciclos = int(request.POST.get("ciclos", 0))
+        sessoes_teste = request.POST.get("sessoes")
+        ciclos_teste = request.POST.get("ciclos")
+        id_sessao_teste = request.POST.get("id_sessao")
+        id_ciclo_teste = request.POST.get("id_ciclo")
 
-        # materia = None
-        # if nome_M:
-        #     materia = Materia.objects.filter(nome_materia__iexact=nome_M).first()# ajustar para não precisar de nome e para selecionar a materia certa caso aja mais de um ou não exista
+        qntd_sessoes = int(sessoes_teste) if sessoes_teste else 0
+        qntd_ciclos = int(ciclos_teste) if ciclos_teste else 0
+        ID_sessao = int(id_sessao_teste) if id_sessao_teste else None
+        ID_ciclo = int(id_ciclo_teste) if id_ciclo_teste else None
         
-        hora_inicio = datetime.now()
-        hora_fim = hora_inicio + timedelta(minutes=25)
+    sessao = Sessao.objects.filter(id=ID_sessao) #Encontrar forma de alterar id no front?
+    ciclo= Ciclo.objects.filter(id=ID_ciclo) #Encontrar forma de alterar id no front?
+    # Enquanto estuda
+    if not ciclo and not sessao: # se não existe #não precisa atualizar se já existe pq atualização é feita no final e se for pausar não muda
+        inicio = datetime.now() #recorda hora atual
+        qntd_sessoes = 0
         sessao = Sessao.objects.create(
-            #id_materia = nome_M, em branco pois Funcionalidade de materia ainda não foi iniciada
-            data_hora_inicio = hora_inicio,
-            data_hora_fim = hora_fim,
-            ciclos_completos = ciclos,
+            id_ciclo = ID_ciclo,
+            data_hora_inicio = inicio,
         )
-        return redirect("iniciar_sessao")
-    sessoes = Sessao.objects.all()#.order_by("-id")
+        ciclo = Ciclo.objects.create(
+            qntd_sessoes = qntd_sessoes,
+        )
+    return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
 
-    sessoes_formatadas=[]
-    for sessao in sessoes:
-        if sessao.data_hora_inicio and sessao.data_hora_fim:
-            inicio = sessao.data_hora_inicio#int(sessao.data_hora_inicio.total_seconds // 60)
-            fim =  sessao.data_hora_fim#int(sessao.data_hora_fim.total_seconds // 60)
-            duracao = fim - inicio
-            minutos_total = int(duracao.total_seconds()) // 60
-            horas = minutos_total // 60
-            minutos = minutos_total % 60
+def finalizar_sessao(request):
+    if request.method == 'POST':
+        qntd_sessoes = int(request.POST.get("sessoes", 0)) 
+        qntd_ciclos = int(request.POST.get("ciclos", 0)) 
+        ID_sessao = int(request.POST.get("id_sessao", ""))
+        ID_ciclo = request.POST.get("id_ciclo","")
+    sessao = Sessao.objects.filter(id=ID_sessao) #Encontrar forma de alterar id no front?
+    ciclo= Ciclo.objects.filter(id=ID_ciclo) #Encontrar forma de alterar id no front?
+    if ciclo and sessao: #se ja existe
+        fim = datetime.now() #recorda fim da sessao
+        if(qntd_sessoes == 4): # 1 ciclo = 4 sessoes ou seja final do ciclo
+            qntd_ciclos +=1
+            sessao = Sessao.objects.update(
+            data_hora_fim = fim,
+        )
+        ciclo = Ciclo.objects.update(
+            qntd_sessoes = qntd_sessoes
+        )
+        return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
 
-            if horas > 0:
-                duracao_formatada = f"{horas}h {minutos}min"
-            else:
-                duracao_formatada = f"{minutos}min"
-        else:
-            duracao_formatada = "Sessão em andamento"
-        materia = request.POST.get("materia", "").strip()
-        sessoes_formatadas.append({
-            #"id":sessao.id, em branco até materia ser adicionada
-            "materia": materia,#em branco até materia ser adicionada - sessao.id_materia.nome_materia if sessao.id_materia else "Não informada",
-            "duracao":duracao_formatada,
-            "ciclos":sessao.ciclos_completos,
-        })
-
-
-    return render(request, "app_pomodoro/iniciar_sessao.html", {"sessoes": sessoes_formatadas})
-
-
-#def iniciar_sessao_vazia(request):
+    qntd_sessoes+=1
+    sessao = Sessao.objects.update(
+        data_hora_fim = fim,
+    )
+    ciclo = Ciclo.objects.create(
+        qntd_sessoes = qntd_sessoes
+    )
+    return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
