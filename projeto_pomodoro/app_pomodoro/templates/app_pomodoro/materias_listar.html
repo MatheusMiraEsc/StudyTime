@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Matérias</title>
+</head>
+<body>
+    <h1>Lista de Matérias</h1>
+    <a href="{% url 'criar_materia' %}">+ Nova Matéria</a>
+    <ul>
+        {% for materia in materias %}
+            <li>
+                <strong>{{ materia.nome_materia }}</strong> - {{ materia.assuntos }}
+                <a href="{% url 'editar_materia' materia.id %}">Editar</a>
+                <a href="{% url 'excluir_materia' materia.id %}">Excluir</a>
+            </li>
+        {% empty %}
+            <li>Nenhuma matéria cadastrada.</li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="{% url 'home' %}">Voltar para Home</a>
+</body>
+</html>

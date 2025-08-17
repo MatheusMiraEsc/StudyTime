@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Matéria</title>
+</head>
+<body>
+    <h1>Excluir Matéria</h1>
+    <p>Tem certeza que deseja excluir a matéria: <strong>{{ materia.nome_materia }}</strong>?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirmar</button>
+    </form>
+
+    <br>
+    <a href="{% url 'listar_materias' %}">Cancelar</a>
+</body>
+</html>

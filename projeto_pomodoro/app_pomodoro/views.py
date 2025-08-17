@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from datetime import timedelta, timezone, datetime
 from .models import Ciclo, Materia, Sessao
 from django.http import HttpResponse
@@ -68,3 +68,35 @@ def finalizar_sessao(request):
         qntd_sessoes = qntd_sessoes
     )
     return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
+
+# -----------------------------
+# CRUD DE MATERIA
+# -----------------------------
+
+def listar_materias(request):
+    materias = Materia.objects.all()
+    return render(request, "app_pomodoro/materias_listar.html", {"materias": materias})
+
+def criar_materia(request):
+    if request.method == "POST":
+        nome = request.POST.get("nome_materia")
+        assuntos = request.POST.get("assuntos")
+        Materia.objects.create(nome_materia=nome, assuntos=assuntos)
+        return redirect("listar_materias")
+    return render(request, "app_pomodoro/materias_form.html")
+
+def editar_materia(request, id):
+    materia = get_object_or_404(Materia, id=id)
+    if request.method == "POST":
+        materia.nome_materia = request.POST.get("nome_materia")
+        materia.assuntos = request.POST.get("assuntos")
+        materia.save()
+        return redirect("listar_materias")
+    return render(request, "app_pomodoro/materias_form.html", {"materia": materia})
+
+def excluir_materia(request, id):
+    materia = get_object_or_404(Materia, id=id)
+    if request.method == "POST":
+        materia.delete()
+        return redirect("listar_materias")
+    return render(request, "app_pomodoro/materias_confirmar_exclusao.html", {"materia": materia})

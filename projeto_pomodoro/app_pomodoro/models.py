@@ -11,8 +11,10 @@ class Sessao(models.Model):
 
 
 class Materia(models.Model):
-    #id_materia = models.IntegerField(null=True)
     id_usuario = models.IntegerField(null=True)
-    nome_materia = models.TextField(null=True) # confirmar se o field ta certo
-    assuntos = models.TextField(null=True) #ajustar para pegar todos assuntos
-    tempo_estudado = models.TimeField(null=True)
+    nome_materia = models.CharField(max_length=100, null=True, blank=True)  # antes era TextField
+    assuntos = models.TextField(null=True, blank=True)  
+    tempo_estudado = models.DurationField(null=True, blank=True)  # antes era TimeField
+
+    def __str__(self):
+        return self.nome_materia if self.nome_materia else "Matéria sem nome"
