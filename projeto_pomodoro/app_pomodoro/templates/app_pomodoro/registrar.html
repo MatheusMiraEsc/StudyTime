@@ -1,0 +1,83 @@
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro</title>
+  <link rel="stylesheet" href="{% static 'app_pomodoro/css/registro.css' %}">
+</head>
+<body>
+
+
+    <a href="{% url 'home_integrado' %}" class="back-btn">
+        Voltar para home
+      </a>
+
+
+
+
+  <div class="container">
+    <div class="register-card">
+
+
+      <h2>Criar Conta</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+
+        <!-- Campo Usuário -->
+<div class="input-container">
+  <img src="https://img.icons8.com/glyph-neue/64/user.png" alt="usuário" class="input-icon">
+  {{ form.username|add_class:"input-field"|attr:"placeholder:Nome de usuário" }}
+</div>
+
+
+<!-- Campo Email -->
+<div class="input-container">
+  <img src="https://img.icons8.com/glyph-neue/64/email-open.png" alt="email" class="input-icon">
+  {{ form.email|add_class:"input-field"|attr:"placeholder:Email" }}
+</div>
+
+
+<!-- Campo Senha -->
+<div class="input-container">
+  <img src="https://img.icons8.com/glyph-neue/64/lock-2.png" alt="senha" class="input-icon">
+  {{ form.password1|add_class:"input-field"|attr:"placeholder:Senha" }}
+</div>
+
+
+<!-- Campo Confirmar Senha -->
+<div class="input-container">
+  <img src="https://img.icons8.com/glyph-neue/64/lock-2.png" alt="confirmar senha" class="input-icon">
+  {{ form.password2|add_class:"input-field"|attr:"placeholder:Confirmação de senha" }}
+</div>
+
+
+<button type="submit" class="btn-register">Registrar</button>
+
+
+      {% if form.errors %}
+        <div class="error">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <p>{{ error }}</p>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+        <p class="already-account">
+        Já tem uma conta? <a href="{% url 'login' %}">Faça login aqui</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

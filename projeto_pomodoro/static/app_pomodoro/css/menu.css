@@ -1,0 +1,108 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100%;
+    background-color: #111827;
+    color: #fff;
+    padding-top: 30px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+}
+
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+
+.sidebar ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    transition: background 0.3s, color 0.3s;
+}
+
+
+.sidebar ul li a span {
+    margin-right: 10px;
+}
+
+
+.sidebar ul li a:hover {
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px;
+}
+
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+}
+
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #d1d5db;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: background 0.3s, color 0.3s;
+}
+
+
+.toggle-btn:hover {
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px;
+}
+
+
+/* quando recolhe */
+.sidebar.collapsed {
+  width: 60px;   /* só os ícones ficam visíveis */
+}
+
+
+.sidebar.collapsed a span {
+  margin: 0; /* remove espaçamento */
+}
+
+
+.sidebar.collapsed a {
+  justify-content: center; /* centraliza ícones */
+}
+
+
+.sidebar.collapsed ul li a {
+  font-size: 0; /* esconde texto */
+}
+
+
+.sidebar.collapsed ul li a span {
+  font-size: 20px; /* mantém ícones visíveis */
+}
+
+
+.content.expanded {
+  margin-left: 60px; /* acompanha a sidebar colapsada */
+  transition: margin-left 0.3s;
+}
+
+
+/* transição suave para sidebar */
+.sidebar, .content {
+  transition: width 0.3s, margin-left 0.3s;
+}

@@ -1,0 +1,64 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Cadastro</title>
+    <!-- bootstrap  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- chama o CSS do login -->
+    <link rel="stylesheet" href="{% static 'app_pomodoro/css/login.css' %}">
+</head>
+<body>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="login-card text-white">
+        <h3 class="text-center mb-4 fw-semibold">Entrar na sua conta</h3>
+
+
+        <!-- google -->
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-light w-100 mb-3 google-btn d-flex align-items-center justify-content-center">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+            Continuar com Google
+        </a>
+
+
+        <div class="divider text-muted" >OU</div>
+
+
+        <!-- bibblioteca -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+<div class="input-container">
+    <img src="https://img.icons8.com/glyph-neue/64/email-open.png" alt="email" class="input-icon">
+    <input type="text" class="input-field" name="username" placeholder="Email" required>
+</div>
+
+
+<div class="input-container">
+    <img src="https://img.icons8.com/glyph-neue/64/lock-2.png" alt="senha" class="input-icon">
+    <input type="password" class="input-field" name="password" placeholder="Senha" required>
+</div>
+
+
+        <button type="submit" class="btn btn-custom w-100 mt-3 py-2">Entrar</button>
+        </form>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+
+        <div class="text-center mt-3">
+            <small>Não tem conta? <a href="{% url 'registrar' %}">Cadastre-se</a></small>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

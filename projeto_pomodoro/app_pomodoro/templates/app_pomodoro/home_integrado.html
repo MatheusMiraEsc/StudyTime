@@ -1,116 +1,70 @@
+{% extends "app_pomodoro/menu.html" %} {% block content %}
+{% load static %}
+{% load widget_tweaks %}
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Pomodoro Timer</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-    #timer { font-size: 48px; margin: 20px; }
-    button { font-size: 16px; margin: 5px; padding: 10px 20px; }
-    input, label { display: block; margin: 10px auto; }
-  </style>
+  <link rel="stylesheet" href="{% static 'app_pomodoro/css/home.css' %}">
 </head>
 <body>
-  <h1>Pomodoro Timer</h1>
+
+
+  <div class="main">
+      <div class="mode-switch">
+      <button id="study-btn" class="mode-btn ">📘 Estudo</button>
+      <button id="break-btn" class="mode-btn ">😌 Descanso</button>
+      </div>
+  </div>
+
+
+<br> <br>
+
+
+<div>
   <div id="timer">25:00</div>
-
-  <button onclick="startStudy()">Iniciar Estudo</button>
-  <button onclick="pauseTimer()">Pausar</button>
-  <button onclick="resumeTimer()">Retomar</button>
-
-  <br><br>
-  <button onclick="startBreak(5)">Descanso 5 min</button>
-  <button onclick="startBreak(15)">Descanso 15 min</button>
-
-  <br><br>
-  <form method="post" action="/iniciar_sessao/">
-    {% csrf_token %}
-    <input type="hidden" name="inicio" id="inicio">
-    <input type="hidden" name="fim" id="fim">
-    <input type="hidden" name="ciclos" id="ciclos" value="0">
-    <button type="submit">Registrar Sessão</button>
-  </form>
-
-  <br><br>
-  <button onclick="window.location.href='/materias/'">Ir para Matérias</button>
+  <br>
+</div>
 
 
-  <script>
-    let timer;
-    let startTime;
-    let remainingTime = 1500; // 25min em segundos
-    let isPaused = false;
-    let ciclos = 0;
 
-    function updateDisplay() {
-      const minutes = Math.floor(remainingTime / 60);
-      const seconds = remainingTime % 60;
-      document.getElementById("timer").textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }
 
-    function startStudy() {
-      if (!startTime) {
-        startTime = new Date();
-        document.getElementById("inicio").value = startTime.toTimeString().slice(0, 8);
-      }
-      remainingTime = 1500;
-      clearInterval(timer);
-      isPaused = false;
-      timer = setInterval(() => {
-        if (!isPaused && remainingTime > 0) {
-          remainingTime--;
-          updateDisplay();
-          if (remainingTime === 0) {
-            alert("Tempo de estudo finalizado! Escolha seu descanso.");
-            ciclos++;
-            document.getElementById("ciclos").value = ciclos;
-            document.getElementById("fim").value = new Date().toTimeString().slice(0, 8);
-          }
-        }
-      }, 1000);
-    }
+<div class="controls">
+  <button id="reset-btn" onclick="resetTimer()">🔄</button>
+  <button id="main-btn" onclick="toggleTimer()">▶️</button>
+</div>
 
-    function pauseTimer() {
-      isPaused = true;
-    }
 
-    function resumeTimer() {
-      isPaused = false;
-    }
+<br> <br>
 
-    function startBreak(minutes) {
-      remainingTime = minutes * 60;
-      clearInterval(timer);
-      isPaused = false;
-      timer = setInterval(() => {
-        if (!isPaused && remainingTime > 0) {
-          remainingTime--;
-          updateDisplay();
-          if (remainingTime === 0) {
-            alert("Descanso finalizado! Pode iniciar o próximo ciclo de estudo.");
-          }
-        }
-      }, 1000);
-    }
 
-    updateDisplay();
+<div class="button-breaks">
+<button id="break-5-btn" onclick="startBreak(5)">Descanso 5 min</button>
+<button id="break-15-btn" onclick="startBreak(15)">Descanso 15 min</button>
+</div>
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-    // Garante que os campos estejam atualizados antes do envio
-    const fim = document.getElementById("fim").value;
-    const inicio = document.getElementById("inicio").value;
-    const ciclosVal = ciclos;
 
-    // if (!inicio || !fim || ciclosVal === 0) {
-    //   e.preventDefault(); // Cancela o envio do formulário
-    //   alert("Você precisa concluir pelo menos 1 ciclo antes de registrar a sessão.");
-    //   return;
-    // }
 
-    document.getElementById("inicio").value = inicio;
-    document.getElementById("fim").value = fim;
-    document.getElementById("ciclos").value = ciclosVal;
-  });
-  </script>
+
+<br><br>
+<form method="post" action="/iniciar_sessao/">
+  {% csrf_token %}
+  <input type="hidden" name="inicio" id="inicio">
+  <input type="hidden" name="fim" id="fim">
+  <input type="hidden" name="ciclos" id="ciclos" value="0">
+  <button type="submit">Registrar Sessão</button>
+</form>
+
+
+
+
+
+
+<script src="{% static 'app_pomodoro/js/home.js' %}"></script>
+{% endblock %}
+
+
 </body>
 </html>

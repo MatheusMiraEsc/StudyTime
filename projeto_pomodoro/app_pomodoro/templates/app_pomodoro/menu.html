@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pomodoro{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'app_pomodoro/css/menu.css' %}">
+</head>
+<body>
+   
+    <div class="sidebar" id="sidebar">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <ul>
+            <li><a href="#"><span>👤</span> Usuário</a></li>
+            <li><a href="{% url 'login' %}"><span>🔑</span> Entrar / Registrar</a></li>
+            <li><a href="{% url 'iniciar_sessao' %}"><span>📘</span> Cadastro de Matérias</a></li>
+            <li><a href="#"><span>📊</span> Gráficos e Relatórios</a></li>
+            <li><a href="#"><span>✅</span> Tarefas</a></li>
+        </ul>
+    </div>
+
+
+    <!-- Conteúdo principal -->
+    <div class="content" id="content">
+        {% block content %}
+       
+    </div>
+
+
+<script src="{% static 'app_pomodoro/js/menu.js' %}"></script>
+
+
+    {% endblock %}
+</body>
+</html>

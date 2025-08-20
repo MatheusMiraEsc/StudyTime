@@ -1,0 +1,128 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: white;
+}
+
+
+.register-card {
+  background-color: #1e293b;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  width: 350px;
+  text-align: center;
+}
+
+
+.register-card h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+
+.input-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+
+.input-container .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+
+.input-container input {
+  width: 85%;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background-color: #1e293b;
+  color: white;
+}
+
+
+.input-container input::placeholder {
+  color: #aaa;
+}
+
+
+.input-container input:hover {
+  background-color: #081b4454;
+}
+
+
+.btn-register {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background-color: #4e8ef7;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+.btn-register:hover {
+  background-color: #3a6fd9;
+}
+
+
+.error {
+  margin-top: 15px;
+  color: #ff6b6b;
+  font-size: 14px;
+}
+
+
+.already-account {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+
+.already-account a {
+  color: #4e8ef7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+
+.already-account a:hover {
+  color: #3a6fd9;
+}
+
+
+.back-btn {
+
+
+  position: fixed;
+  margin-top: -25rem;
+  margin-left: -55rem;
+  color: #4e8ef7;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+
+.back-btn:hover {
+  color: #3a6fd9;
+}
+
+

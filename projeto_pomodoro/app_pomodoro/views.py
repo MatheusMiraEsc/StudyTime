@@ -2,10 +2,16 @@ from django.shortcuts import get_object_or_404, render, redirect
 from datetime import timedelta, timezone, datetime
 from .models import Ciclo, Materia, Sessao
 from django.http import HttpResponse
+from .forms import Registroform
+from django.contrib.auth import authenticate, login
+
 # Create your views here.
 
 def home(request):
     return render(request, 'app_pomodoro/home_integrado.html')
+
+def menu(request):
+    return render(request, 'app_pomodoro/menu.html')
 
 # id_sessao = models.IntegerField()
 #     id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=True, blank=True)
@@ -68,6 +74,28 @@ def finalizar_sessao(request):
         qntd_sessoes = qntd_sessoes
     )
     return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
+
+def registrar(request):
+    if request.method == 'POST':
+        form = Registroform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home_integrado')
+    else:
+        form = Registroform()
+    return render(request, 'app_pomodoro/registrar.html', {'form': form})
+
+def logar(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home_integrado')
+        else:
+            return render(request, 'app_pomodoro/logar.html', {'error': 'Usuário ou senha inválidos.'})
+    return render(request, 'app_pomodoro/logar.html')
 
 # -----------------------------
 # CRUD DE MATERIA

@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from app_pomodoro import views
 
 urlpatterns = [
@@ -14,4 +14,11 @@ urlpatterns = [
     path('materias/nova/', views.criar_materia, name='criar_materia'),
     path('materias/editar/<int:id>/', views.editar_materia, name='editar_materia'),
     path('materias/excluir/<int:id>/', views.excluir_materia, name='excluir_materia'),
+    
+    # Rotas para login, registro e menu com css e js
+    path('registrar/', views.registrar, name='registrar'),
+    path('login/', views.logar, name='login'),
+    path('social/', include('social_django.urls', namespace='social')),
+    path('menu/', views.menu, name='menu'),
+
 ]

@@ -9,9 +9,8 @@ class Sessao(models.Model):
     data_hora_inicio = models.DateTimeField(null=True, blank=True)
     data_hora_fim = models.DateTimeField(null=True,blank=True)
 
-
 class Materia(models.Model):
-    id_usuario = models.IntegerField(null=True)
+    id_usuario = models.IntegerField(null=True) #colocar como ForeignKey e criar model Usuario
     nome_materia = models.CharField(max_length=100, null=True, blank=True)  # antes era TextField
     assuntos = models.TextField(null=True, blank=True)  
     tempo_estudado = models.DurationField(null=True, blank=True)  # antes era TimeField
