@@ -1,0 +1,16 @@
+<h1>{{ materia.nome_materia }}</h1>
+<p><strong>Assuntos:</strong> {{ materia.assuntos }}</p>
+<p><strong>Total de minutos estudados:</strong> {{ minutos_totais }}</p>
+
+<h2>Sessões dessa matéria:</h2>
+<ul>
+  {% for sessao in sessoes %}
+    <li>
+      Início: {{ sessao.data_hora_inicio }}<br>
+      Fim: {{ sessao.data_hora_fim }}
+    </li>
+  {% empty %}
+    <li>Nenhuma sessão registrada para esta matéria.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'listar_materias' %}">Voltar para lista de matérias</a>

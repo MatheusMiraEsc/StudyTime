@@ -8,16 +8,18 @@
     <h1>Lista de Matérias</h1>
     <a href="{% url 'criar_materia' %}">+ Nova Matéria</a>
     <ul>
-        {% for materia in materias %}
-            <li>
-                <strong>{{ materia.nome_materia }}</strong> - {{ materia.assuntos }}
-                <a href="{% url 'editar_materia' materia.id %}">Editar</a>
-                <a href="{% url 'excluir_materia' materia.id %}">Excluir</a>
-            </li>
-        {% empty %}
-            <li>Nenhuma matéria cadastrada.</li>
-        {% endfor %}
-    </ul>
+        <ul>
+            {% for materia in materias %}
+                 <li>
+                    <strong>{{ materia.nome_materia }}</strong> - {{ materia.assuntos }}
+                    <a href="{% url 'editar_materia' materia.id %}">Editar</a>
+                    <a href="{% url 'excluir_materia' materia.id %}">Excluir</a>
+                    <a href="{% url 'detalhes_materia' materia.id %}">Ver tempo estudado</a>
+                </li>
+    {% empty %}
+    <li>Nenhuma matéria cadastrada.</li>
+    {% endfor %}
+</ul>
     <br>
     <a href="{% url 'home_integrado' %}">Voltar para Home</a>
 </body>
