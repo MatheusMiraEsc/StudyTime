@@ -14,6 +14,7 @@ urlpatterns = [
     path('materias/nova/', views.criar_materia, name='criar_materia'),
     path('materias/editar/<int:id>/', views.editar_materia, name='editar_materia'),
     path('materias/excluir/<int:id>/', views.excluir_materia, name='excluir_materia'),
+    path('materia/<int:materia_id>/', views.detalhes_materia, name='detalhes_materia'),
     
     # Rotas para login, registro e menu com css e js
     path('registrar/', views.registrar, name='registrar'),

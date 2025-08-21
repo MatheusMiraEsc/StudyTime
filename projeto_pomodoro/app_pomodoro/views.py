@@ -19,7 +19,12 @@ def menu(request):
 #     data_hora_fim = models.TimeField()
 #     ciclos_completos = models.IntegerField()
 
-def iniciar_sessao(request): # ativar função ao iniciar sessao e terminar sessao
+def iniciar_sessao(request):  # ativar função ao iniciar sessao e terminar sessao
+    qntd_sessoes = 0
+    qntd_ciclos = 0
+    ID_sessao = None
+    ID_ciclo = None
+
     if request.method == 'POST':
         sessoes_teste = request.POST.get("sessoes")
         ciclos_teste = request.POST.get("ciclos")
@@ -30,21 +35,22 @@ def iniciar_sessao(request): # ativar função ao iniciar sessao e terminar sess
         qntd_ciclos = int(ciclos_teste) if ciclos_teste else 0
         ID_sessao = int(id_sessao_teste) if id_sessao_teste else None
         ID_ciclo = int(id_ciclo_teste) if id_ciclo_teste else None
-        
-    sessao = Sessao.objects.filter(id=ID_sessao) #Encontrar forma de alterar id no front?
-    ciclo= Ciclo.objects.filter(id=ID_ciclo) #Encontrar forma de alterar id no front?
+
+    sessao = Sessao.objects.filter(id=ID_sessao) if ID_sessao else None
+    ciclo = Ciclo.objects.filter(id=ID_ciclo) if ID_ciclo else None
+
     # Enquanto estuda
-    if not ciclo and not sessao: # se não existe #não precisa atualizar se já existe pq atualização é feita no final e se for pausar não muda
-        inicio = datetime.now() #recorda hora atual
+    if not ciclo and not sessao:
+        inicio = datetime.now()  # recorda hora atual
         qntd_sessoes = 0
         sessao = Sessao.objects.create(
-            id_ciclo = ID_ciclo,
-            data_hora_inicio = inicio,
+            id_ciclo=ID_ciclo,
+            data_hora_inicio=inicio,
         )
         ciclo = Ciclo.objects.create(
-            qntd_sessoes = qntd_sessoes,
+            qntd_sessoes=qntd_sessoes,
         )
-    return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
+    return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos": qntd_ciclos})
 
 def finalizar_sessao(request):
     if request.method == 'POST':
@@ -128,3 +134,18 @@ def excluir_materia(request, id):
         materia.delete()
         return redirect("listar_materias")
     return render(request, "app_pomodoro/materias_confirmar_exclusao.html", {"materia": materia})
+
+def detalhes_materia(request, materia_id):
+    materia = get_object_or_404(Materia, id=materia_id)
+    sessoes = materia.sessoes.all()
+    minutos_totais = 0
+    for sessao in sessoes:
+        if sessao.data_hora_inicio and sessao.data_hora_fim:
+            duracao = sessao.data_hora_fim - sessao.data_hora_inicio
+            minutos_totais += int(duracao.total_seconds() // 60)
+            return redirect("listar_materias")
+    return render(request, 'app_pomodoro/materia_detalhe.html', {
+        'materia': materia,
+        'minutos_totais': minutos_totais,
+        'sessoes': sessoes,
+    })
