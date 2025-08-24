@@ -49,15 +49,20 @@
 
 
 <br><br>
-<form method="post" action="/iniciar_sessao/">
-  {% csrf_token %}
-  <input type="hidden" name="inicio" id="inicio">
-  <input type="hidden" name="fim" id="fim">
-  <input type="hidden" name="ciclos" id="ciclos" value="0">
-  <button type="submit">Registrar Sessão</button>
-</form>
+<a href="{% url 'registro_ciclo' %}">
+    <button type="button">Registrar Ciclo</button>
+</a>
 
 
+
+<h2>Lista de ciclos</h2>
+<ul>
+    {% for c in ciclos %}
+        <li>Matéria: {{ c.id_materia.nome_materia }} | Sessões: {{ c.qntd_sessoes }}</li>
+    {% empty %}
+        <li>Nenhum ciclo registrado ainda.</li>
+    {% endfor %}
+</ul>
 
 
 

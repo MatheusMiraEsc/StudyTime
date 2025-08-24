@@ -11,6 +11,7 @@ class Materia(models.Model):
 
 class Ciclo(models.Model):
     qntd_sessoes = models.IntegerField(null=True, blank=True)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=True, blank=True)
 
 class Sessao(models.Model):
     id_ciclo = models.ForeignKey(Ciclo, on_delete=models.CASCADE, null=True, blank=True)

@@ -7,8 +7,13 @@ from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'app_pomodoro/home_integrado.html')
+def home(request):    
+    sessoes = Sessao.objects.all()
+    ciclos = Ciclo.objects.all()
+    return render(request, "app_pomodoro/home_integrado.html", {
+        "sessoes": sessoes,
+        "ciclos": ciclos,
+    })
 
 def menu(request):
     return render(request, 'app_pomodoro/menu.html')
@@ -70,7 +75,7 @@ def finalizar_sessao(request):
         ciclo = Ciclo.objects.update(
             qntd_sessoes = qntd_sessoes
         )
-        return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
+        return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes})
 
     qntd_sessoes+=1
     sessao = Sessao.objects.update(
@@ -81,7 +86,19 @@ def finalizar_sessao(request):
     )
     return render(request, "app_pomodoro/home_integrado.html", {"sessoes": qntd_sessoes, "ciclos":  qntd_ciclos})
 
-def registrar(request):
+def registrar_ciclo(request):
+    if request.method == 'POST':
+        total_sessoes = 0
+        materia_escolhida = request.POST.get('nome_materia')
+
+        materia = Materia.objects.filter(nome_materia__iexact=materia_escolhida).first() if materia_escolhida else None
+        ciclo = Ciclo.objects.create(qntd_sessoes=total_sessoes,id_materia=materia)
+        ciclos = Ciclo.objects.all()
+        return redirect('home_integrado')
+
+    return render(request, "app_pomodoro/registro_ciclo.html")
+
+def registrar(request):# registrar usuario
     if request.method == 'POST':
         form = Registroform(request.POST)
         if form.is_valid():

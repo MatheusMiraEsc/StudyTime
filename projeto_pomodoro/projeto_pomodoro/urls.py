@@ -22,4 +22,7 @@ urlpatterns = [
     path('social/', include('social_django.urls', namespace='social')),
     path('menu/', views.menu, name='menu'),
 
+    #Rota para registro de ciclo
+    path('registro_ciclo/', views.registrar_ciclo, name='registro_ciclo')
+
 ]

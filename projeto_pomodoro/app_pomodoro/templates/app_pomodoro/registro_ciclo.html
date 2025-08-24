@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if ciclo %}Editar{% else %}Criar{% endif %} Ciclo</title>
+</head>
+<body>
+    <h1>{% if ciclo %}Editar{% else %}Criar{% endif %} Ciclo</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="nome_materia">Materia:</label>
+        <input type="text" id="nome_materia" name="nome_materia" value="{{ materia.nome_materia|default:'' }}"><br><br>
+
+        <button type="submit">Salvar</button>
+    </form>
+
+    <br>
+    <a href="{% url 'home_integrado' %}">Voltar para home</a>
+</body>
+</html>
