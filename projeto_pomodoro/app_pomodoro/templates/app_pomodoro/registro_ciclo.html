@@ -15,6 +15,16 @@
         <button type="submit">Salvar</button>
     </form>
 
+    <h2>Lista de ciclos</h2>
+<ul>
+    {% for c in ciclos %}
+        <li>Matéria: {{ c.id_materia.nome_materia }} | Sessões: {{ c.qntd_sessoes }}</li>
+    {% empty %}
+        <li>Nenhum ciclo registrado ainda.</li>
+    {% endfor %}
+</ul>
+
+
     <br>
     <a href="{% url 'home_integrado' %}">Voltar para home</a>
 </body>
